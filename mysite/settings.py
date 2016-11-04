@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'registration',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -103,4 +104,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-LOGIN_REDIRECT_URL = '/'
+REGISTRATION_OPEN = True #If true, users can register
+ACCOUNT_ACTIVATION_DAYS = 7 #One-week activation window (default)
+REGISTRATION_AUTO_LOGIN = True #the users will automatically be logged in if this is True
+LOGIN_REDIRECT_URL = '/' # the page users arrive at after they log in
+LOGIN_URL = '/accounts/login/' #The page users are redirected to if they are not logged in and are trying to access a page requiring authentication

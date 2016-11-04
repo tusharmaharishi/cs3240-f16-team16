@@ -1,6 +1,7 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+{% if user.is_authenticated %}
 {% for post in posts %}
 <div class="post">
   <div class="date">
@@ -10,4 +11,7 @@
   <p>{{ post.text|linebreaksbr }}</p>
 </div>
 {% endfor %}
+{% else %}
+<p> Please <a href="{% url 'login' %}">login</a> to continue.</p>
+{% endif %}
 {% endblock %}
