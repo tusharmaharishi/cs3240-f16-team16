@@ -6,7 +6,8 @@ from .models import Report
 class ReportForm(ModelForm):
     class Meta:
         model = Report
-        fields = ['title', 'file', 'short_desc', 'detailed_desc', 'location', 'tag']
+        fields = ['title', 'file', 'tag']
+        #fields = ['title', 'file', 'short_desc', 'detailed_desc', 'location', 'tag']
 
 
 class SearchForm(forms.Form):
