@@ -12,5 +12,7 @@ urlpatterns = [
     url(r'^post/(?P<pk>\d+)/remove/$', views.post_remove, name='post_remove'),
 #    url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^group/$', views.group_list, name='group_list'),
+    url(r'^group/new/', views.group_new, name='group_new')
 ]
 

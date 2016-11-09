@@ -3,7 +3,8 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from .forms import PostForm
+from django.contrib.auth.models import User, Permission, Group
+from .forms import PostForm, GroupForm
 from .models import Post #.models has a . to mean current directory
 
 def post_list(request):
@@ -61,3 +62,22 @@ def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete() #every django model can be deleted with the .delete() method
     return redirect('post_list')
+
+@login_required
+def group_list(request):
+    groups = request.user.groups.all()
+    return render(request, 'group/group_list.html', {'groups' : groups})
+
+@login_required
+def group_new(request):
+    if request.method == "POST":
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            group_name = form.cleaned_data['group_Name']
+            group = Group.objects.create(name=group_name)
+            user = request.user
+            user.groups.add(group)
+            return redirect('group_list',)
+    else:
+        form = GroupForm()
+    return render(request, 'group/group_new.html', {'form': form})

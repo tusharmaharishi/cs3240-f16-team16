@@ -1,0 +1,17 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+{% for group in groups %}
+<div class="group">
+  <h1><a href="">{{ group.name }}</a></h1>
+</div>
+{% endfor %}
+
+<h2><a href="{% url 'group_new' %}">Create Group</a></h2>
+{% else %}
+<p> Please <a href="{% url 'login' %}">login</a> to continue.</p>
+{% endif %}
+
+{% endblock %}
