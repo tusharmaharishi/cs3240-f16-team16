@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import Group, User
 from django.utils import timezone
 
 class Post(models.Model): #this post is a django model
@@ -14,3 +15,6 @@ class Post(models.Model): #this post is a django model
 
     def __str__(self):
         return self.title
+
+class Usergroup(Group):
+    users = models.ManyToManyField(User)

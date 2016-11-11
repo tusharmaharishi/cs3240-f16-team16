@@ -13,6 +13,8 @@ urlpatterns = [
 #    url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^group/$', views.group_list, name='group_list'),
-    url(r'^group/new/', views.group_new, name='group_new')
+    url(r'^group/new/', views.group_new, name='group_new'),
+    url(r'^group/(?P<pk>\d+)/$', views.group_detail, name='group_detail'),
+    #url(r'^group/(?P<pk>\d+)/add/$', views.add_user, name='add_user'),
 ]
 

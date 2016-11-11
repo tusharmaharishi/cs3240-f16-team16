@@ -81,3 +81,10 @@ def group_new(request):
     else:
         form = GroupForm()
     return render(request, 'group/group_new.html', {'form': form})
+
+@login_required
+def group_detail(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    return render(request, 'group/group_detail.html', {'group' : group})
+
+
