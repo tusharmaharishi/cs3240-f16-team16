@@ -17,6 +17,7 @@
   <a class="btn btn-default" href="{% url 'post_remove' pk=post.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
   {% endif %}
   <h1>{{ post.title }}</h1>
-  <p>{{ post.text|linebreaksbr }}</p>
+  <p>{{ post.description|linebreaksbr }}</p>
+  <a href="{{ MEDIA_URL }} {{ post.document.url}}">Uploaded File</a>
 </div>
 {% endblock %}
