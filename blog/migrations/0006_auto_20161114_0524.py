@@ -8,7 +8,6 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0007_alter_validators_add_error_messages'),
         ('blog', '0005_auto_20161114_0015'),
     ]
 
