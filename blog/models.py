@@ -17,6 +17,3 @@ class Post(models.Model): #this post is a django model
 
     def __str__(self):
         return self.title
-
-class Usergroup(Group):
-    users = models.ManyToManyField(User)

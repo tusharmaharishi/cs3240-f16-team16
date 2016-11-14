@@ -8,5 +8,6 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ('title', 'description', 'document')
 
-class GroupForm(forms.Form):
-	group_Name = forms.CharField(max_length=256)
+class GroupForm(forms.Form):	
+        group_Name = forms.CharField(max_length=256)
+        fields = ('users')

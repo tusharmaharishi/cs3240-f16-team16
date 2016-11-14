@@ -2,7 +2,10 @@
 
 {% block content %}
 <div class "group">
+    <a class="btn btn-default" href="{% url 'group_remove' pk=group.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
     <h1>{{ group.name }}</h1>
-
+    <p>{{ group.user_set }} </p>
+    <a class="btn btn-default" href="{% url 'add_user' name=group.name %}">Add Users</a>
+    
 </div>
 {% endblock%}

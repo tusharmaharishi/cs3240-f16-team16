@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Permission, Group
 from .forms import PostForm, GroupForm
 from .models import Post #.models has a . to mean current directory
+from django.utils.text import slugify
 
 def post_list(request):
     #posts = Post.objects.all()#filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -85,8 +86,18 @@ def group_new(request):
     return render(request, 'group/group_new.html', {'form': form})
 
 @login_required
-def group_detail(request, pk):
-    group = get_object_or_404(Group, pk=pk)
+def group_detail(request, name):
+    group = get_object_or_404(Group, name=name)
     return render(request, 'group/group_detail.html', {'group' : group})
 
+@login_required
+def add_user(request, name):
+    group = get_object_or_404(Group, name=name)
+    return render(request, 'group/add_user.html', {'group' : group})
+
+@login_required
+def group_remove(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    group.delete()
+    return redirect('group_list')
 
