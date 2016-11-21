@@ -5,8 +5,9 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Permission, Group
 from django.db.models import Q #helps with querysets using "or" and "and"                                                                        
-from .forms import PostForm, GroupForm
-from .models import Post #.models has a . to mean current directory
+from .forms import PostForm, GroupForm, FolderForm
+from .models import Post, Folder #.models has a . to mean current directory
+
 
 def post_list(request):
     #posts = Post.objects.all()#filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -90,5 +91,41 @@ def group_new(request):
 def group_detail(request, pk):
     group = get_object_or_404(Group, pk=pk)
     return render(request, 'group/group_detail.html', {'group' : group})
+
+@login_required
+def folder_list(request):
+    folder_list = Folder.objects.all()
+    folders = []
+    for f in folder_list:
+        if f.user == request.user.username:
+            folders.append(f);
+    return render(request, 'folder/folder_list.html', {'folders' : folders})
+
+@login_required
+def folder_new(request):
+    print("Hi")
+    if request.method == "POST":
+        f = Folder(user=request.user.username)
+        form = FolderForm(request.POST, instance=f)
+        if form.is_valid():
+            folder = form.save(commit=False)
+            folder.name = form.cleaned_data['name']
+            #post.published_date = timezone.now()
+            folder.save()
+            return redirect('post_list',)
+    else:
+        form = FolderForm()
+    return render(request, 'folder/folder_new.html', {'form': form})
+
+def folder_detail(request, pk):
+    list_posts = Post.objects.all()
+    folder = get_object_or_404(Folder, pk=pk)
+    posts = []
+    for p in list_posts:
+        if p.folder == folder:
+            posts.append(p)
+
+    return render(request, 'folder/folder_detail.html', {'folder' : folder,
+        'posts' : posts })
 
 

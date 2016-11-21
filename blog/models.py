@@ -2,12 +2,20 @@ from django.db import models
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 
+class Folder(models.Model):
+    name = models.CharField(max_length=100)
+    user = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 class Post(models.Model): #this post is a django model
     author = models.ForeignKey('auth.User') #link to another model
     title = models.CharField(max_length=200) #text with limited number of chars
     private = models.BooleanField(default=False) #checkbox for private                                                                           
     description = models.CharField(max_length=255, blank=True) #text with unlimited number of chars
     document = models.FileField(upload_to='documents/%Y/%m/%d')
+    folder = models.ForeignKey(Folder, null=True, default=None, blank=True)
     upload_at = models.DateTimeField(auto_now_add=True)
     created_date = models.DateTimeField(default=timezone.now) #date and time
     published_date = models.DateTimeField(blank=True, null=True)
