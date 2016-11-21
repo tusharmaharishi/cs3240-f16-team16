@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Folder
 from django.contrib.auth.models import Group
 
 class PostForm(forms.ModelForm):
@@ -9,4 +9,9 @@ class PostForm(forms.ModelForm):
         fields = ('title', 'description', 'document')
 
 class GroupForm(forms.Form):
-	group_Name = forms.CharField(max_length=256)
+	group_Name = forms.CharField(max_length=250)
+
+class FolderForm(forms.ModelForm):
+	class Meta:
+		model = Folder
+		fields = ('name',)

@@ -1,0 +1,17 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+{% for folder in folders %}
+<div class="folder">
+  <h1><a href="">{{ folder.name }}</a></h1>
+</div>
+{% endfor %}
+
+<h2><a href="{% url 'folder_new' %}">Create Folder</a></h2>
+{% else %}
+<p> Please <a href="{% url 'login' %}">login</a> to continue.</p>
+{% endif %}
+
+{% endblock %}
