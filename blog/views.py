@@ -114,4 +114,15 @@ def folder_new(request):
         form = FolderForm()
     return render(request, 'folder/folder_new.html', {'form': form})
 
+def folder_detail(request, pk):
+    list_posts = Post.objects.all()
+    folder = get_object_or_404(Folder, pk=pk)
+    posts = []
+    for p in list_posts:
+        if p.folder == folder:
+            posts.append(p)
+
+    return render(request, 'folder/folder_detail.html', {'folder' : folder,
+        'posts' : posts })
+
 
