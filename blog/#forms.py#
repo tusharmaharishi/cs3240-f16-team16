@@ -6,7 +6,8 @@ class PostForm(forms.ModelForm):
 
     class Meta: #where we tell django which model should be used to make the form
         model = Post
-        fields = ('title', 'description', 'document', 'private') #added 'private' field
+        fields = ('title', 'description', 'document', 'private') #added 'private'
 
-class GroupForm(forms.Form):
-	group_Name = forms.CharField(max_length=256)
+class GroupForm(forms.Form):	
+        group_Name = forms.CharField(max_length=256)
+        fields = ('users')
