@@ -25,7 +25,8 @@ SECRET_KEY = '=_+4f9=p!d070!l&9h)xu5gzbzg@+o7sf*7b%6^tg01-0+mhcc'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+]
 
 
 # Application definition
@@ -112,19 +113,3 @@ ACCOUNT_ACTIVATION_DAYS = 7 #One-week activation window (default)
 REGISTRATION_AUTO_LOGIN = True #the users will automatically be logged in if this is True
 LOGIN_REDIRECT_URL = '/' # the page users arrive at after they log in
 LOGIN_URL = '/accounts/login/' #The page users are redirected to if they are not logged in and are trying to access a page requiring authentication
-
-#-----------BELOW IS FOR HEROKU DEPLOYMENT-------------#
-
-import dj_database_url
-DATABASES['default'] = dj_database_url.config()
-
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-ALLOWED_HOSTS = ['*']
-
-DEBUG = False
-
-try:
-    from .local_settings import *
-except ImportError:
-    pass
