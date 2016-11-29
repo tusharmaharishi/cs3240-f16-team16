@@ -3,13 +3,13 @@ from . import views
 
 urlpatterns = [
 #    url(r'^$', views.login, name='login'),
-    url(r'^$', views.post_list, name='post_list'), #views.post_list is the place to go if we arrive at the main page
-    url(r'^post/(?P<pk>\d+)/$', views.post_detail, name='post_detail'),
-    url(r'^post/new/$', views.post_new, name='post_new'),
-    url(r'^post/(?P<pk>\d+)/edit/$', views.post_edit, name='post_edit'),
-    url(r'^drafts/$', views.post_draft_list, name='post_draft_list'),
-    url(r'^post/(?P<pk>\d+)/publish/$', views.post_publish, name='post_publish'),
-    url(r'^post/(?P<pk>\d+)/remove/$', views.post_remove, name='post_remove'),
+    url(r'^$', views.report_list, name='report_list'), #views.report_list is the place to go if we arrive at the main page
+    url(r'^report/(?P<pk>\d+)/$', views.report_detail, name='report_detail'),
+    url(r'^report/new/$', views.report_new, name='report_new'),
+    url(r'^report/(?P<pk>\d+)/edit/$', views.report_edit, name='report_edit'),
+    url(r'^drafts/$', views.report_draft_list, name='report_draft_list'),
+    url(r'^report/(?P<pk>\d+)/publish/$', views.report_publish, name='report_publish'),
+    url(r'^report/(?P<pk>\d+)/remove/$', views.report_remove, name='report_remove'),
 #    url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^group/$', views.group_list, name='group_list'),

@@ -5,67 +5,67 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Permission, Group
 from django.db.models import Q #helps with querysets using "or" and "and"                                                                        
-from .forms import PostForm, GroupForm, FolderForm
-from .models import Post, Folder #.models has a . to mean current directory
+from .forms import ReportForm, GroupForm, FolderForm
+from .models import Report, Folder #.models has a . to mean current directory
 
 @login_required
-def post_list(request):
+def report_list(request):
     #posts = Post.objects.all()#filter(published_date__lte=timezone.now()).order_by('published_date')
     #posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     #post = get_object_or_404(Post, pk=pk)
-    posts = Post.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
+    return render(request, 'blog/report_list.html', {'reports': reports})
 
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    return render(request, 'blog/post_detail.html', {'post': post})
+def report_detail(request, pk):
+    report = get_object_or_404(Report, pk=pk)
+    return render(request, 'blog/report_detail.html', {'report': report})
 
 @login_required
-def post_new(request):
+def report_new(request):
     if request.method == "POST":
-        form = PostForm(request.POST, request.FILES)
+        form = ReportForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.document = request.FILES['document']
-            post.author = request.user
+            report = form.save(commit=False)
+            report.document = request.FILES['document']
+            report.author = request.user
             #post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
+            report.save()
+            return redirect('report_detail', pk=report.pk)
     else:
-        form = PostForm()
-    return render(request, 'blog/post_edit.html', {'form': form})
+        form = ReportForm()
+    return render(request, 'blog/report_edit.html', {'form': form})
 
 @login_required
-def post_edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+def report_edit(request, pk):
+    report = get_object_or_404(Report, pk=pk)
     if request.method == "POST":
-        form = PostForm(request.POST, request.FILES, instance=post)
+        form = ReportForm(request.POST, request.FILES, instance=report)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
+            report = form.save(commit=False)
+            report.author = request.user
             #post.published_date = timezone.now()
-            post.save()
-            return redirect('post_detail', pk=post.pk)
+            report.save()
+            return redirect('report_detail', pk=report.pk)
     else:
-        form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+        form = ReportForm(instance=report)
+    return render(request, 'blog/report_edit.html', {'form': form})
 
 @login_required
-def post_draft_list(request):
-    posts = Post.objects.filter(published_date__isnull=True).order_by('created_date') #get list of posts that have no published date (ergo, drafts)
-    return render(request, 'blog/post_draft_list.html', {'posts': posts})
+def report_draft_list(request):
+    reports = Report.objects.filter(published_date__isnull=True).order_by('created_date') #get list of posts that have no published date (ergo, drafts)
+    return render(request, 'blog/report_draft_list.html', {'reports': reports})
 
 @login_required
-def post_publish(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.publish()
-    return redirect('post_detail', pk=pk)
+def report_publish(request, pk):
+    report = get_object_or_404(Report, pk=pk)
+    report.publish()
+    return redirect('report_detail', pk=pk)
 
 @login_required
-def post_remove(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    post.delete() #every django model can be deleted with the .delete() method
-    return redirect('post_list')
+def report_remove(request, pk):
+    report = get_object_or_404(Report, pk=pk)
+    report.delete() #every django model can be deleted with the .delete() method
+    return redirect('report_list')
 
 
 @login_required
@@ -112,20 +112,20 @@ def folder_new(request):
             folder.name = form.cleaned_data['name']
             #post.published_date = timezone.now()
             folder.save()
-            return redirect('post_list',)
+            return redirect('report_list',)
     else:
         form = FolderForm()
     return render(request, 'folder/folder_new.html', {'form': form})
 
 def folder_detail(request, pk):
-    list_posts = Post.objects.all()
+    list_reports = Report.objects.all()
     folder = get_object_or_404(Folder, pk=pk)
-    posts = []
-    for p in list_posts:
+    reports = []
+    for p in list_reports:
         if p.folder == folder:
-            posts.append(p)
+            reports.append(p)
 
     return render(request, 'folder/folder_detail.html', {'folder' : folder,
-        'posts' : posts })
+        'reports' : reports })
 
 

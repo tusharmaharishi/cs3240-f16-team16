@@ -9,7 +9,7 @@ class Folder(models.Model):
     def __str__(self):
         return self.name
 
-class Post(models.Model): #this post is a django model
+class Report(models.Model): #this Report is a django model
     author = models.ForeignKey('auth.User') #link to another model
     title = models.CharField(max_length=200) #text with limited number of chars
     private = models.BooleanField(default=False) #checkbox for private                                                                           

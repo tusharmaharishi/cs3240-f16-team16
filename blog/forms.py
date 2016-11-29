@@ -1,11 +1,11 @@
 from django import forms
-from .models import Post, Folder
+from .models import Report, Folder
 from django.contrib.auth.models import Group
 
-class PostForm(forms.ModelForm):
+class ReportForm(forms.ModelForm):
 
     class Meta: #where we tell django which model should be used to make the form
-        model = Post
+        model = Report
         fields = ('title', 'description', 'document', 'private', 'folder') #added 'private' field
 
 class GroupForm(forms.Form):
