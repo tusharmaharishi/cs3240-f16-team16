@@ -1,11 +1,11 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-
+<h1>Folders</h1>
 {% if user.is_authenticated %}
 {% for folder in folders %}
 <div class="folder">
-  <h1><a href="{% url 'folder_detail' pk=folder.pk %}">{{ folder.name }}</a></h1>
+  <h2><a href="{% url 'folder_detail' pk=folder.pk %}">{{ folder.name }}</a></h2>
 </div>
 {% endfor %}
 
@@ -14,4 +14,12 @@
 <p> Please <a href="{% url 'login' %}">login</a> to continue.</p>
 {% endif %}
 
+{% endblock %}
+
+{% block sidebar %}
+<ul class="subnavilist">
+    <li><a href="{% url 'report_list' %} ">All</a></li>
+    <li><a href="{% url 'report_list' %} ">Reports</a></li>
+    <li><a href="{% url 'folder_list' %} ">Folders</a></li>
+</ul>
 {% endblock %}

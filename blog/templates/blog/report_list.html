@@ -1,10 +1,11 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+<h1>Reports</h1>
 {% if user.is_authenticated %}
 {% for report in reports %}
 <div class="report">
-  <h1><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a></h1>
+  <h2><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a></h2>
   <div class="date">
     <p>published: {{ report.published_date }}</p>
   </div>
@@ -14,4 +15,12 @@
 {% else %}
 <p> Please <a href="{% url 'login' %}">login</a> to continue.</p>
 {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+<ul class="subnavilist">
+    <li><a href="{% url 'report_list' %} ">All</a></li>
+    <li><a href="{% url 'report_list' %} ">Reports</a></li>
+    <li><a href="{% url 'folder_list' %} ">Folders</a></li>
+</ul>
 {% endblock %}
