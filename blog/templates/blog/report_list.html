@@ -3,15 +3,32 @@
 {% block content %}
 <h1>Reports</h1>
 {% if user.is_authenticated %}
+<table class="table table-striped">
+		<tr>
+			<th>Report Title</th>
+			<th>Author</th>
+			<th>Description</th>
+			<th>Document</th>
+			<th>Private</th>
+		</tr>
 {% for report in reports %}
-<div class="report">
+<!-- <div class="report">
   <h2><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a></h2>
   <div class="date">
     <p>published: {{ report.published_date }}</p>
   </div>
   <p>{{ report.text|linebreaksbr }}</p>
-</div>
+</div> -->
+		<tr>
+			<td><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a></td>
+			<td>{{ report.author }}</td>
+			<td>{{ report.description }}</td>
+			<td>{{ report.document }}</td>
+			<td>{{ report.private }}</td>
+		</tr>
 {% endfor %}
+</table>
+<a href="{% url 'report_new' %}"><button type="button" class="btn btn-primary">Add Report</button></a>
 {% else %}
 <p> Please <a href="{% url 'login' %}">login</a> to continue.</p>
 {% endif %}
