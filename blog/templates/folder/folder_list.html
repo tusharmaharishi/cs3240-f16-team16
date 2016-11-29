@@ -3,13 +3,20 @@
 {% block content %}
 <h1>Folders</h1>
 {% if user.is_authenticated %}
+<table class="table table-inverse table-striped">
+		<tr>
+			<th>Folder Title</th>
+			<th>Owner</th>
+		</tr>
 {% for folder in folders %}
-<div class="folder">
-  <h2><a href="{% url 'folder_detail' pk=folder.pk %}">{{ folder.name }}</a></h2>
-</div>
+		<tr>
+			<td><a href="{% url 'folder_detail' pk=folder.pk %}">{{ folder.name }}</a></td>
+			<td>{{ folder.user }}</td>
+		</tr>
 {% endfor %}
+</table>
 
-<h2><a href="{% url 'folder_new' %}">Create Folder</a></h2>
+<a href="{% url 'folder_new' %}"><button type="button" class="btn btn-primary">Create Folder</button>
 {% else %}
 <p> Please <a href="{% url 'login' %}">login</a> to continue.</p>
 {% endif %}
