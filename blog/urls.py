@@ -20,5 +20,8 @@ urlpatterns = [
     url(r'^folder/(?P<pk>\d+)/$', views.folder_detail, name='folder_detail'),
         url(r'^messages/', include('django_messages.urls')),
     #url(r'^group/(?P<pk>\d+)/add/$', views.add_user, name='add_user'),
+
+    #comment out if not working:
+    url(r'^search/$', search_file),
 ]
 

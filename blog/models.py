@@ -19,6 +19,17 @@ class Report(models.Model): #this Report is a django model
     upload_at = models.DateTimeField(auto_now_add=True)
     created_date = models.DateTimeField(default=timezone.now) #date and time
     published_date = models.DateTimeField(blank=True, null=True)
+    #reporter = models.ForeignKey('User')
+    #title = models.CharField(max_length=30)
+    #sub_date = models.DateTimeField(auto_now_add=True, auto_created=True)
+    #short_desc = models.TextField(max_length=30, blank=True)  # blank=True: allow empty string
+    #detailed_desc = models.TextField(max_length=100, blank=True)
+    #location = models.CharField(max_length=30, blank=True)
+    #file = models.FileField(upload_to="reports")
+    #tag = models.CharField(max_length=30, blank=True)
+
+
+
 
     def publish(self):
         self.published_date = timezone.now()

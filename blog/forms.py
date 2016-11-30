@@ -15,3 +15,11 @@ class FolderForm(forms.ModelForm):
 	class Meta:
 		model = Folder
 		fields = ('name',)
+
+
+# class SearchForm(forms.Form):
+#     title = forms.CharField(max_length=30,required=False)
+#     sub_date = forms.DateTimeField(label='submission date',required=False)
+#     description = forms.CharField(max_length=100,required=False)
+#     location = forms.CharField(max_length=30,required=False)
+#     tag = forms.CharField(max_length=30,required=False)
