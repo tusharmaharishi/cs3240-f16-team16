@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="report">
+
+
+
+  {% if user.is_authenticated %}
+  <a class="btn btn-default" href="{% url 'report_edit' pk=report.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+  <a class="btn btn-default" href="{% url 'report_remove' pk=report.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+  {% endif %}
+  <h1>{{ report.title }}</h1>
+  {% if report.published_date %}
+  <div class="date">
+    {{ report.published_date }}
+  </div>
+  {% else %}
+  <a class="btn btn-default" href="{% url 'report_publish' pk=report.pk %}">Publish</a>
+  {% endif %}  
+  <p>{{ report.description|linebreaksbr }}</p>
+  <a href="{{ MEDIA_URL }} {{ report.document.url}}">Uploaded File</a>
+</div>
+{% endblock %}
