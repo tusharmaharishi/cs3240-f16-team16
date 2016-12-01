@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^group/$', views.group_list, name='group_list'),
     url(r'^group/new/$', views.group_new, name='group_new'),
     url(r'^group/(?P<pk>\d+)/$', views.group_detail, name='group_detail'),
+    url(r'^group/(?P<pk>\d+)/adduser$', views.group_adduser, name='group_adduser'),
     url(r'^folder/new/$', views.folder_new, name='folder_new'),
     url(r'^folder/$', views.folder_list, name='folder_list'),
     url(r'^folder/(?P<pk>\d+)/$', views.folder_detail, name='folder_detail'),

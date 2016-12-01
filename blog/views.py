@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Permission, Group
 from django.db.models import Q #helps with querysets using "or" and "and"                                                                        
-from .forms import PostForm, GroupForm, FolderForm
+from .forms import PostForm, GroupForm, GroupAddUser, FolderForm
 from .models import Post, Folder #.models has a . to mean current directory
 
 @login_required
@@ -71,6 +71,8 @@ def post_remove(request, pk):
 @login_required
 def group_list(request):
     groups = request.user.groups.all()
+    
+    #posts = Post.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
     return render(request, 'group/group_list.html', {'groups' : groups})
 
 @login_required
@@ -88,9 +90,28 @@ def group_new(request):
     return render(request, 'group/group_new.html', {'form': form})
 
 @login_required
+def group_adduser(request, pk):
+    if request.method == "POST":
+        form = GroupAddUser(request.POST)
+        if form.is_valid():
+            group = get_object_or_404(Group, pk=pk)
+            name = form.cleaned_data['user']
+            #Cannot resolve keyword 'name' into field. Choices are: date_joined, email, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, password, post, registrationprofile, user_permissions, usergroup, username
+            try:
+                user = User.objects.get(username=name)
+                group.user_set.add(user)
+                return redirect('group_list',)
+            except User.DoesNotExist:
+                return redirect('group_list',)
+    else:
+        form = GroupAddUser()
+    return render(request, 'group/group_adduser.html', {'form': form})
+
+@login_required
 def group_detail(request, pk):
     group = get_object_or_404(Group, pk=pk)
-    return render(request, 'group/group_detail.html', {'group' : group})
+    userlist = group.user_set.all()
+    return render(request, 'group/group_detail.html', {'group' : group, 'userlist' : userlist})
 
 @login_required
 def folder_list(request):

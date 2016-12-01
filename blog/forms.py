@@ -11,7 +11,13 @@ class PostForm(forms.ModelForm):
 class GroupForm(forms.Form):
 	group_Name = forms.CharField(max_length=250)
 
+class GroupAddUser(forms.Form):
+    user = forms.CharField(max_length=250)
+
 class FolderForm(forms.ModelForm):
 	class Meta:
 		model = Folder
 		fields = ('name',)
+
+#class SearchForm(forms.ModelForm):
+#    searched = forms.charField(max_length=250)

@@ -1,8 +1,15 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class "group">
     <h1>{{ group.name }}</h1>
-
+    <h2><a href="{% url 'group_adduser' pk=group.pk %}">Add user to group?</a><h2>
+{% for item in userlist %}
+<p>{{ item.get_username }}</p>
+{% endfor %}
 </div>
+{% else %}
+<p> Please <a href="{% url 'login' %}">login</a> to continue.</p>
+{% endif %}
 {% endblock%}
