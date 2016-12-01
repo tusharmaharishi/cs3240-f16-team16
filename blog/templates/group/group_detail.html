@@ -5,6 +5,7 @@
 <div class "group">
     <h1>{{ group.name }}</h1>
     <h2><a href="{% url 'group_adduser' pk=group.pk %}">Add user to group?</a><h2>
+	<h2><a href="{% url 'group_removeuser' pk=group.pk %}">Remove user from group?</a><h2>
 {% for item in userlist %}
 <p>{{ item.get_username }}</p>
 {% endfor %}

@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Permission, Group
 from django.db.models import Q #helps with querysets using "or" and "and"                                                                        
-from .forms import ReportForm, GroupForm, GroupAddUser, FolderForm
+from .forms import ReportForm, GroupForm, GroupAddUser, GroupRemoveUser, FolderForm
 from .models import Report, Folder #.models has a . to mean current directory
 
 @login_required
@@ -106,6 +106,23 @@ def group_adduser(request, pk):
     else:
         form = GroupAddUser()
     return render(request, 'group/group_adduser.html', {'form': form})
+
+@login_required
+def group_removeuser(request, pk):
+    if request.method == "POST":
+        form = GroupRemoveUser(request.POST)
+        if form.is_valid():
+            group = get_object_or_404(Group, pk=pk)
+            name = form.cleaned_data['user']
+            try:
+                user = User.objects.get(username=name)
+                group.user_set.remove(user)
+                return redirect('group_list',)
+            except:
+                return redirect('group_list',)
+    else:
+        form = GroupRemoveUser()
+    return render(request, 'group/group_removeuser.html', {'form': form})
 
 @login_required
 def group_detail(request, pk):

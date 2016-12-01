@@ -14,6 +14,9 @@ class GroupForm(forms.Form):
 class GroupAddUser(forms.Form):
     user = forms.CharField(max_length=250)
 
+class GroupRemoveUser(forms.Form):
+    user = forms.CharField(max_length=250)
+
 class FolderForm(forms.ModelForm):
 	class Meta:
 		model = Folder
