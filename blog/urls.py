@@ -23,6 +23,6 @@ urlpatterns = [
     #url(r'^group/(?P<pk>\d+)/add/$', views.add_user, name='add_user'),
 
     #comment out if not working:
-    url(r'^search/$', search_file),
+    #url(r'^search/$', search_file),
 ]
 
