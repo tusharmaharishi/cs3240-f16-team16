@@ -1,21 +1,32 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-
-{% if user.is_authenticated %}
 <h1>Groups</h1>
+{% if user.is_authenticated %}
+<table class="table table-inverse table-striped">
+		<tr>
+			<th>Group Title</th>
+		</tr>
 <form method='GET' action=''>
 <input type='text' name='q' placeholder='Search groups' value='{{ request.GET.q }}'/> 
 <input type='submit' value='Search' /> 
 {% for group in groups %}
-<div class="group">
-  <h1><a href="{% url 'group_detail' pk=group.pk %}">{{ group.name }}</a></h1>
-</div>
+	<tr>
+		<td><a href="{% url 'group_detail' pk=group.pk %}">{{ group.name }}</a></td>
+	</tr>
 {% endfor %}
-
-<h2><a href="{% url 'group_new' %}">Create Group</a></h2>
+</table>
+<a href="{% url 'group_new' %}"><button type="button" class="btn btn-primary">Create Group</button></a>
 {% else %}
 <p> Please <a href="{% url 'login' %}">login</a> to continue.</p>
 {% endif %}
 
+{% endblock %}
+
+{% block sidebar %}
+<ul class="subnavilist">
+    <li><a href="{% url 'report_list' %} ">Reports</a></li>
+    <li><a href="{% url 'folder_list' %} ">Folders</a></li>
+    <li><a href="{% url 'group_list' %} ">Groups</a></li>
+</ul>
 {% endblock %}
