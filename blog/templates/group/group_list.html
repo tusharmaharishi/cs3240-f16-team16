@@ -3,6 +3,10 @@
 {% block content %}
 
 {% if user.is_authenticated %}
+<h1>Groups</h1>
+<form method='GET' action=''>
+<input type='text' name='q' placeholder='Search groups' value='{{ request.GET.q }}'/> 
+<input type='submit' value='Search' /> 
 {% for group in groups %}
 <div class="group">
   <h1><a href="{% url 'group_detail' pk=group.pk %}">{{ group.name }}</a></h1>

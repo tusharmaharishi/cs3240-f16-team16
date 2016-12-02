@@ -8,6 +8,9 @@
 			<th>Folder Title</th>
 			<th>Owner</th>
 		</tr>
+<form method='GET' action=''>
+<input type='text' name='q' placeholder='Search folders' value='{{ request.GET.q }}'/> 
+<input type='submit' value='Search' /> 
 {% for folder in folders %}
 		<tr>
 			<td><a href="{% url 'folder_detail' pk=folder.pk %}">{{ folder.name }}</a></td>

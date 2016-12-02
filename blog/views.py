@@ -13,7 +13,16 @@ def report_list(request):
     #posts = Post.objects.all()#filter(published_date__lte=timezone.now()).order_by('published_date')
     #posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     #post = get_object_or_404(Post, pk=pk)
-    reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
+    query = request.GET.get("q")
+    if query:
+        reports = Report.objects.filter(
+            Q(title__icontains=query)|
+            Q(author__first_name__icontains=query)|
+            Q(author__last_name__icontains=query)|
+            Q(description__icontains=query)
+        )
+    else:
+        reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
     return render(request, 'blog/report_list.html', {'reports': reports})
 
 def report_detail(request, pk):
@@ -58,7 +67,15 @@ def report_edit(request, pk):
 
 @login_required
 def report_draft_list(request):
-    reports = Report.objects.filter(published_date__isnull=True).order_by('created_date') #get list of posts that have no published date (ergo, drafts)
+    query = request.GET.get("q")
+    if query:
+        reports = Report.objects.filter(published_date__isnull=True)
+        reports = reports.filter(
+            Q(title__icontains=query)|
+            Q(description__icontains=query)
+        )
+    else:
+        reports = Report.objects.filter(published_date__isnull=True).order_by('created_date') #get list of posts that have no published date (ergo, drafts)
     return render(request, 'blog/report_draft_list.html', {'reports': reports})
 
 @login_required
@@ -76,7 +93,13 @@ def report_remove(request, pk):
 
 @login_required
 def group_list(request):
-    groups = request.user.groups.all()
+    query = request.GET.get("q")
+    if query:
+        groups = Report.objects.filter(
+            Q(name__icontains=query)
+        )
+    else:
+        groups = request.user.groups.all()
     
     #posts = Post.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
     return render(request, 'group/group_list.html', {'groups' : groups})
@@ -138,11 +161,18 @@ def group_detail(request, pk):
 
 @login_required
 def folder_list(request):
-    folder_list = Folder.objects.all()
+    query = request.GET.get("q")
+    if query:
+        folders = Report.objects.filter(
+            Q(name__icontains=query)|
+            Q(user__icontains=query)
+        )
+    else:
+        folder_list = Folder.objects.all()
     folders = []
     for f in folder_list:
-        if f.user == request.user.username:
-            folders.append(f);
+       if f.user == request.user.username:
+           folders.append(f);
     return render(request, 'folder/folder_list.html', {'folders' : folders})
 
 @login_required

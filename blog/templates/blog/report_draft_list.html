@@ -1,6 +1,10 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+<h1>Drafts</h1>
+<form method='GET' action=''>
+<input type='text' name='q' placeholder='Search drafts' value='{{ request.GET.q }}'/> 
+<input type='submit' value='Search' /> 
     {% for report in reports %}
         <div class="report">
             <h1><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a></h1>

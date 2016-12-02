@@ -11,6 +11,9 @@
 			<th>Document</th>
 			<th>Private</th>
 		</tr>
+<form method='GET' action=''>
+<input type='text' name='q' placeholder='Search posts' value='{{ request.GET.q }}'/> 
+<input type='submit' value='Search' /> 
 {% for report in reports %}
 <!-- <div class="report">
   <h2><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a></h2>
