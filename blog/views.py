@@ -70,13 +70,13 @@ def report_edit(request, pk):
 def report_draft_list(request):
     query = request.GET.get("q")
     if query:
-        reports = Report.objects.filter(published_date__isnull=True)
+        reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__isnull=True)) 
         reports = reports.filter(
             Q(title__icontains=query)|
             Q(description__icontains=query)
         )
     else:
-        reports = Report.objects.filter(published_date__isnull=True).order_by('created_date') #get list of posts that have no published date (ergo, drafts)
+        reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__isnull=True)).order_by('created_date') #get list of posts that have no published date (ergo, drafts)
     return render(request, 'blog/report_draft_list.html', {'reports': reports})
 
 @login_required
