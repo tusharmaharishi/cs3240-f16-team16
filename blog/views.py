@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Permission, Group
 from django.db.models import Q #helps with querysets using "or" and "and"                                                                        
 from .forms import ReportForm, GroupForm, GroupAddUser, GroupRemoveUser, FolderForm
-from .models import Report, Folder #.models has a . to mean current directory
+from .models import Report, Folder, Document #.models has a . to mean current directory
 
 @login_required
 def report_list(request):
@@ -24,10 +24,16 @@ def report_detail(request, pk):
 def report_new(request):
     if request.method == "POST":
         form = ReportForm(request.POST, request.FILES)
+        files = request.FILES.getlist('files')
+        print(request.FILES.getlist('files'))
         if form.is_valid():
             report = form.save(commit=False)
-            report.document = request.FILES['document']
             report.author = request.user
+            report.save()
+            for file in files:
+                document = Document(document=file)
+                document.save()
+                report.documents.add(document)
             #post.published_date = timezone.now()
             report.save()
             return redirect('report_detail', pk=report.pk)

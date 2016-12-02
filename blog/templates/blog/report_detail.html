@@ -18,6 +18,8 @@
   <a class="btn btn-default" href="{% url 'report_publish' pk=report.pk %}">Publish</a>
   {% endif %}  
   <p>{{ report.description|linebreaksbr }}</p>
-  <a href="{{ MEDIA_URL }} {{ report.document.url}}">Uploaded File</a>
+  {% for document in report.documents.all %}
+    <a href="{{ document.document.url }}">Uploaded File: {{document.document.name}}</a>
+  {% endfor %}
 </div>
 {% endblock %}

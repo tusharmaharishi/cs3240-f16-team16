@@ -4,6 +4,7 @@ xs{% extends 'blog/base.html' %}
     <h1>New report</h1>
     <form method="POST" class="report-form" enctype="multipart/form-data">{% csrf_token %}
         {{ form.as_p }}
+        <input type="file" name="files" multiple>
         <button type="submit" class="save btn btn-default">Save and Upload</button>
     </form>
 {% endblock %}

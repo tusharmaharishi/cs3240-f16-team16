@@ -6,7 +6,7 @@ class ReportForm(forms.ModelForm):
 
     class Meta: #where we tell django which model should be used to make the form
         model = Report
-        fields = ('title', 'description', 'document', 'private', 'folder') #added 'private' field
+        fields = ('title', 'description', 'private', 'folder') #added 'private' field
 
 class GroupForm(forms.Form):
 	group_Name = forms.CharField(max_length=250)
