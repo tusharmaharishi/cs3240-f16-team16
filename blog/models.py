@@ -17,7 +17,7 @@ class Report(models.Model): #this Report is a django model
     title = models.CharField(max_length=200) #text with limited number of chars
     private = models.BooleanField(default=False) #checkbox for private                                                                           
     description = models.CharField(max_length=255, blank=True) #text with unlimited number of chars
-    group = models.CharField(max_length=100, default="") 
+    group = models.CharField(max_length=100, default="", blank=True) 
     documents = models.ManyToManyField(Document)
     folder = models.ForeignKey(Folder, null=True, default=None, blank=True)
     upload_at = models.DateTimeField(auto_now_add=True)
