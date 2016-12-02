@@ -15,12 +15,12 @@ def report_list(request):
     #post = get_object_or_404(Post, pk=pk)
     query = request.GET.get("q")
     if query:
-        reports = Report.objects.filter(
+        reports = Report.objects.filter((
             Q(title__icontains=query)|
             Q(author__first_name__icontains=query)|
             Q(author__last_name__icontains=query)|
             Q(description__icontains=query)
-        )
+        ) & Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())) # fixing privacy issues with searching
     else:
         reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
     return render(request, 'blog/report_list.html', {'reports': reports})
