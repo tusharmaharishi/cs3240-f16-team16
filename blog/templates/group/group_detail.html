@@ -6,8 +6,15 @@
     <h1>{{ group.name }}</h1>
     <h2><a href="{% url 'group_adduser' pk=group.pk %}">Add user to group?</a><h2>
 	<h2><a href="{% url 'group_removeuser' pk=group.pk %}">Remove user from group?</a><h2>
+<p>USERS</p>
 {% for item in userlist %}
 <p>{{ item.get_username }}</p>
+{% endfor %}
+<p>REPORTS</p>
+{% for report in reportlist %}
+{% if report.group == group.name %}
+<h3><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a><h3>
+{% endif %}
 {% endfor %}
 </div>
 {% else %}

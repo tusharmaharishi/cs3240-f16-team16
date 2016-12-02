@@ -39,6 +39,7 @@ def report_new(request):
             report = form.save(commit=False)
             report.author = request.user
             report.save()
+            report.group = form.cleaned_data['group']
             for file in files:
                 document = Document(document=file)
                 document.save()
@@ -157,7 +158,17 @@ def group_removeuser(request, pk):
 def group_detail(request, pk):
     group = get_object_or_404(Group, pk=pk)
     userlist = group.user_set.all()
-    return render(request, 'group/group_detail.html', {'group' : group, 'userlist' : userlist})
+    query = request.GET.get("q")
+    if query:
+        reports = Report.objects.filter(
+            Q(title__icontains=query)|
+            Q(author__first_name__icontains=query)|
+            Q(author__last_name__icontains=query)|
+            Q(description__icontains=query)
+        )
+    else:
+        reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
+    return render(request, 'group/group_detail.html', {'group' : group, 'userlist' : userlist, 'reportlist' : reports})
 
 @login_required
 def folder_list(request):
