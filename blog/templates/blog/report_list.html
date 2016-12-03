@@ -25,7 +25,7 @@
 		<tr>
 			<td><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a></td>
 			<td>{{ report.author }}</td>
-			<td>{{ report.description }}</td>
+			<td>{{ report.short_description }}</td>
 		<td>{% for document in report.documents.all %}
 			<a href="{{ document.document.url }}">{{ document.document.name }}</a>
 		{% endfor %}</td>

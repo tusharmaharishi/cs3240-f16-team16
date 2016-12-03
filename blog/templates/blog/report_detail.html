@@ -17,7 +17,7 @@
   {% else %}
   <a class="btn btn-default" href="{% url 'report_publish' pk=report.pk %}">Publish</a>
   {% endif %}  
-  <p>{{ report.description|linebreaksbr }}</p>
+  <p>{{ report.long_description|linebreaksbr }}</p>
   {% for document in report.documents.all %}
     <a href="{{ document.document.url }}">Uploaded File: {{document.document.name}}</a>
   {% endfor %}
