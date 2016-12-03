@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^group/(?P<pk>\d+)/removeuser&', views.group_removeuser, name='group_removeuser'),
     url(r'^folder/new/$', views.folder_new, name='folder_new'),
     url(r'^folder/$', views.folder_list, name='folder_list'),
+    url(r'^folder/(?P<pk>\d+)/remove/$', views.folder_remove, name='folder_remove'),
+    url(r'^folder/(?P<pk>\d+)/edit/$', views.folder_edit, name='folder_edit'),
     url(r'^folder/(?P<pk>\d+)/$', views.folder_detail, name='folder_detail'),
     url(r'^messages/', include('django_messages.urls')),
     #url(r'^group/(?P<pk>\d+)/add/$', views.add_user, name='add_user'),

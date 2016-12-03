@@ -1,6 +1,10 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+{% if user.is_authenticated and user.username == folder.user %}
+  <a class="btn btn-default" href="{% url 'folder_edit' pk=folder.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+  <a class="btn btn-default" href="{% url 'folder_remove' pk=folder.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+  {% endif %}
 <div class "group">
     <h1>{{ folder.name }}</h1>
     {% for report in reports %}

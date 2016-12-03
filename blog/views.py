@@ -197,10 +197,26 @@ def folder_new(request):
             folder.name = form.cleaned_data['name']
             #post.published_date = timezone.now()
             folder.save()
-            return redirect('report_list',)
+            return redirect('folder_list',)
     else:
         form = FolderForm()
     return render(request, 'folder/folder_new.html', {'form': form})
+
+@login_required
+def folder_edit(request, pk):
+    print("Hi")
+    folder = get_object_or_404(Folder, pk=pk)
+    if request.method == "POST":
+        form = FolderForm(request.POST, instance=folder)
+        if form.is_valid():
+            folder = form.save(commit=False)
+            folder.name = form.cleaned_data['name']
+            #post.published_date = timezone.now()
+            folder.save()
+            return redirect('folder_list',)
+    else:
+        form = FolderForm()
+    return render(request, 'folder/folder_edit.html', {'form': form})
 
 def folder_detail(request, pk):
     list_reports = Report.objects.all()
@@ -212,6 +228,12 @@ def folder_detail(request, pk):
 
     return render(request, 'folder/folder_detail.html', {'folder' : folder,
         'reports' : reports })
+
+def folder_remove(request, pk):
+    folder = get_object_or_404(Folder, pk=pk)
+    folder.delete() #every django model can be deleted with the .delete() method
+    return redirect('folder_list')
+
 
 # def search_file(request):
 #     if request.method == 'POST':
