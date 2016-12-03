@@ -18,7 +18,7 @@ h1, h2, h3, h4 {
     font-family: 'Lobster', cursive;
 }
 
-.date {
+.date, .author {
     color: #828282;
 }
 
@@ -85,4 +85,8 @@ li a:hover {
 
 .btn-primary {
     float: right;
+}
+
+h3 {
+    color: #ff9400;
 }

@@ -5,21 +5,30 @@
 
 
 
-  {% if user.is_authenticated %}
+  {% if user.is_authenticated and user == report.author %}
   <a class="btn btn-default" href="{% url 'report_edit' pk=report.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
   <a class="btn btn-default" href="{% url 'report_remove' pk=report.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
   {% endif %}
   <h1>{{ report.title }}</h1>
   {% if report.published_date %}
+  <div class="author">{{report.author}}</div>
   <div class="date">
     {{ report.published_date }}
   </div>
   {% else %}
   <a class="btn btn-default" href="{% url 'report_publish' pk=report.pk %}">Publish</a>
-  {% endif %}  
+  {% endif %}
+
+  <h3>Short Description</h3>
+  <p>{{report.short_description|linebreaksbr}}</p>
+  <h3>Long Description</h3>  
   <p>{{ report.long_description|linebreaksbr }}</p>
+  <h3>Attachments</h3>
   {% for document in report.documents.all %}
     <a href="{{ document.document.url }}">Uploaded File: {{document.document.name}}</a>
   {% endfor %}
+
+  <h3>Group</h3>
+  <p>{{report.group}}</p>
 </div>
 {% endblock %}
