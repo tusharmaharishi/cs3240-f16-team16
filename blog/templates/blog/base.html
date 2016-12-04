@@ -26,8 +26,13 @@
     <div class="content container">
       <div class="row">
         <div class="col-md-4">
-          {% block sidebar %}
-          {% endblock %}
+        {% block sidebar%}
+          <ul class="subnavilist">
+            <li><a href="{% url 'report_list' %} ">Reports</a></li>
+            <li><a href="{% url 'folder_list' %} ">Folders</a></li>
+            <li><a href="{% url 'group_list' %} ">Groups</a></li>
+        {% endblock %}
+        </ul>
         </div>
         <div class="col-md-8">
           {% block content %}
