@@ -7,6 +7,8 @@ from django.contrib.auth.models import User, Permission, Group
 from django.db.models import Q #helps with querysets using "or" and "and"                                                                        
 from .forms import ReportForm, GroupForm, GroupAddUser, GroupRemoveUser, FolderForm
 from .models import Report, Folder, Document #.models has a . to mean current directory
+from django_messages.models import Message, MessageManager, inbox_count_for
+from django.http import HttpResponse
 
 @login_required
 def report_list(request):
@@ -19,7 +21,8 @@ def report_list(request):
             Q(title__icontains=query)|
             Q(author__first_name__icontains=query)|
             Q(author__last_name__icontains=query)|
-            Q(description__icontains=query)
+            Q(long_description__icontains=query)|
+            Q(short_description__icontains=query)
         ) & Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())) # fixing privacy issues with searching
     else:
         reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
@@ -96,7 +99,7 @@ def report_remove(request, pk):
 def group_list(request):
     query = request.GET.get("q")
     if query:
-        groups = Report.objects.filter(
+        groups = Group.objects.filter(
             Q(name__icontains=query)
         )
     else:
@@ -174,7 +177,7 @@ def group_detail(request, pk):
 def folder_list(request):
     query = request.GET.get("q")
     if query:
-        folders = Report.objects.filter(
+        folder_list = Folder.objects.filter(
             Q(name__icontains=query)|
             Q(user__icontains=query)
         )
@@ -233,6 +236,10 @@ def folder_remove(request, pk):
     folder = get_object_or_404(Folder, pk=pk)
     folder.delete() #every django model can be deleted with the .delete() method
     return redirect('folder_list')
+
+def get_unread_messages(request):
+    unread_messages = inbox_count_for(request.user)
+    return HttpResponse(unread_messages)
 
 
 # def search_file(request):
