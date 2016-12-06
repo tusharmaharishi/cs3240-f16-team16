@@ -33,7 +33,7 @@
             <li><a href="{% url 'folder_list' %} ">Folders</a></li>
             <li><a href="{% url 'group_list' %} ">Groups</a></li>
             {% if user.is_superuser %}
-            <li><a href="{% url 'add_site_manager' %} ">Add Site Manager</a></li>
+            <li><a href="{% url 'site_manager_actions' %} ">Site Manager</a></li>
             {% endif %}
         {% endblock %}
         {% endif %}

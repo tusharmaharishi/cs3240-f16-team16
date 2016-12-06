@@ -140,19 +140,6 @@ def group_adduser(request, pk):
         form = GroupAddUser()
     return render(request, 'group/group_adduser.html', {'form': form})
 
-def add_site_manager(request):
-    if request.method == "POST":
-        form = SiteManagerAdd(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['user']
-            user = User.objects.get(username=name)
-            user.is_superuser = True
-            user.save()
-            return redirect('report_list',)
-    else:
-        form = SiteManagerAdd()
-    return render(request, 'admin/add_site_manager.html', {'form' : form })
-
 @login_required
 def group_removeuser(request, pk):
     if request.method == "POST":
@@ -254,6 +241,23 @@ def get_unread_messages(request):
     unread_messages = inbox_count_for(request.user)
     return HttpResponse(unread_messages)
 
+@login_required
+def add_site_manager(request):
+    if request.method == "POST":
+        form = SiteManagerAdd(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['user']
+            user = User.objects.get(username=name)
+            user.is_superuser = True
+            user.save()
+            return redirect('report_list',)
+    else:
+        form = SiteManagerAdd()
+    return render(request, 'admin/add_site_manager.html', {'form' : form })
+
+@login_required
+def site_manager_actions(request):
+    return render(request, 'admin/site_manager_actions.html',)
 # def search_file(request):
 #     if request.method == 'POST':
 #         form = SearchForm(request.POST)
