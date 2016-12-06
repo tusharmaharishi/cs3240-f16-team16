@@ -7,15 +7,29 @@
   {% endif %}
 <div class "group">
     <h1>{{ folder.name }}</h1>
+    <table class="table table-inverse table-striped">
+		<tr>
+			<th>Report Title</th>
+			<th>Author</th>
+			<th>Short Description</th>
+			<th>Document</th>
+			<th>Uploaded at</th>
+			<th>Private</th>
+		</tr>
     {% for report in reports %}
-		<div class="report">
-		  <div class="date">
-		    <p>published: {{ report.published_date }}</p>
-		  </div>
-		  <h1><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a></h1>
-		  <p>{{ report.text|linebreaksbr }}</p>
-		</div>
+		<tr>
+			<td><a href="{% url 'report_detail' pk=report.pk %}">{{ report.title }}</a></td>
+			<td>{{ report.author }}</td>
+			<td>{{ report.short_description }}</td>
+		<td>{% for document in report.documents.all %}
+			<a href="{{ document.document.url }}">{{ document.document.name }}</a>
+		{% endfor %}</td>
+			<td width="20%">{{report.upload_at}}</td>
+			<td>{{ report.private }}</td>
+
+		</tr>
 	{% endfor %}
-	<h2><a href="{% url 'report_new' %}">Add New Report</a></h2>
+	</table>
+	<a href="{% url 'report_new' %}"><button type="button" class="btn btn-primary">Add New Report</button></a>
 </div>
 {% endblock%}

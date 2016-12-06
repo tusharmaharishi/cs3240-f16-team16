@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Permission, Group
 from django.db.models import Q #helps with querysets using "or" and "and"                                                                        
-from .forms import ReportForm, GroupForm, GroupAddUser, GroupRemoveUser, FolderForm
+from .forms import ReportForm, GroupForm, GroupAddUser, GroupRemoveUser, FolderForm, SiteManagerAdd
 from .models import Report, Folder, Document #.models has a . to mean current directory
 from django_messages.models import Message, MessageManager, inbox_count_for
 from django.http import HttpResponse
@@ -140,6 +140,19 @@ def group_adduser(request, pk):
         form = GroupAddUser()
     return render(request, 'group/group_adduser.html', {'form': form})
 
+def add_site_manager(request):
+    if request.method == "POST":
+        form = SiteManagerAdd(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['user']
+            user = User.objects.get(username=name)
+            user.is_superuser = True
+            user.save()
+            return redirect('report_list',)
+    else:
+        form = SiteManagerAdd()
+    return render(request, 'admin/add_site_manager.html', {'form' : form })
+
 @login_required
 def group_removeuser(request, pk):
     if request.method == "POST":
@@ -240,7 +253,6 @@ def folder_remove(request, pk):
 def get_unread_messages(request):
     unread_messages = inbox_count_for(request.user)
     return HttpResponse(unread_messages)
-
 
 # def search_file(request):
 #     if request.method == 'POST':

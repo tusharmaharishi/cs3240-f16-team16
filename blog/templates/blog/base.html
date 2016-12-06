@@ -26,12 +26,17 @@
     <div class="content container">
       <div class="row">
         <div class="col-md-4">
+        {% if user.is_authenticated %}
         {% block sidebar%}
           <ul class="subnavilist">
             <li><a href="{% url 'report_list' %} ">Reports</a></li>
             <li><a href="{% url 'folder_list' %} ">Folders</a></li>
             <li><a href="{% url 'group_list' %} ">Groups</a></li>
+            {% if user.is_superuser %}
+            <li><a href="{% url 'add_site_manager' %} ">Add Site Manager</a></li>
+            {% endif %}
         {% endblock %}
+        {% endif %}
         </ul>
         </div>
         <div class="col-md-8">

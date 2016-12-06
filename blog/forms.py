@@ -1,6 +1,9 @@
 from django import forms
 from .models import Report, Folder
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
+
+class SiteManagerAdd(forms.Form):
+	user = forms.CharField(max_length=250)
 
 class ReportForm(forms.ModelForm):
 

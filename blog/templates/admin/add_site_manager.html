@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h1>User Name:</h1>
+    <form action="{{ action }}" method="POST" class="admin-form">{% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="save btn btn-default">Add Site Manager</button>
+    </form>
+{% endblock %}
