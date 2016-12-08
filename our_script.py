@@ -10,7 +10,7 @@ def find_filename(file_name):
 # Logging in ==============================================================
 while True:
     session = requests.session()
-    url = "https://mang0.herokuapp.com/accounts/login/"
+    url = "https://m4ng0.herokuapp.com/accounts/login/"
     print("\nPlease log in\n")
     username = input("Username: ")
     password = input("Password: ")
@@ -20,7 +20,7 @@ while True:
     r = session.post(url, data=payload, headers=dict(Referer=url))
 
 #AUTHENTICATING THE USER ================================================                                                                                            
-    url2 = "https://mang0.herokuapp.com/fda_authenticate/"
+    url2 = "https://m4ng0.herokuapp.com/fda_authenticate/"
     session.get(url2)
     token2 = session.cookies['csrftoken']
     payload2 = {"csrfmiddlewaretoken": token2}
@@ -31,7 +31,7 @@ while True:
 
 # obtaining a master list of reports to use                                                                                                                          
 master_report_list = []
-url = "https://mang0.herokuapp.com/fetch_all/"
+url = "https://m4ng0.herokuapp.com/fetch_all/"
 session.get(url)
 token = session.cookies['csrftoken']
 payload = {"csrfmiddlewaretoken": token}
@@ -68,7 +68,7 @@ while master == True:
                     else:
                         t = False
                         break
-            url = "https://mang0.herokuapp.com/fetch/"
+            url = "https://m4ng0.herokuapp.com/fetch/"
             session.get(url)
             token = session.cookies['csrftoken']
             payload = {"title": title, "csrfmiddlewaretoken": token}
@@ -97,7 +97,7 @@ while master == True:
                     break
                 else:
                     continue
-                url = "https://mang0.herokuapp.com/download/"
+                url = "https://m4ng0.herokuapp.com/download/"
                 session.get(url)
                 token = session.cookies['csrftoken']
                 payload = {"title": title, "name": file, "csrfmiddlewaretoken": token}
