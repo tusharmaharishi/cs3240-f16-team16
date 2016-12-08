@@ -9,6 +9,8 @@ from .forms import ReportForm, GroupForm, GroupAddUser, GroupRemoveUser, FolderF
 from .models import Report, Folder, Document #.models has a . to mean current directory
 from django_messages.models import Message, MessageManager, inbox_count_for
 from django.http import HttpResponse
+import json
+import os
 
 @login_required
 def report_list(request):
@@ -243,6 +245,46 @@ def folder_remove(request, pk):
 def get_unread_messages(request):
     unread_messages = inbox_count_for(request.user)
     return HttpResponse(unread_messages)
+
+def fda_fetch(request):
+    reports = Report.objects.all()
+    if "title" not in reports:
+        HttpResponse("No report")
+    report_name = request.POST.get("title")
+    report = Report.objects.get(title=report_name)
+    data_list = []
+    list = report.documents.all()
+
+    if not list.count():
+        return HttpResponse(json.dumps("nothing"))
+
+    for document in list:
+        data_list.append(document.document.name)
+
+    data = json.dumps(data_list)
+    return HttpResponse(data)
+
+def fda_fetch_all(request):
+    report_list = Report.objects.filter(private=False)
+    if not report_list.count():
+        return HttpResponse(json.dumps("No public reports"))
+
+    list = []
+    for report in report_list:
+        list.append((report.title, report.short_description))
+
+    data = json.dumps(sorted(list))
+    return HttpResponse(data)
+    
+def fda_download(request):
+    report_name = request.POST.get("title")
+    report = Report.objects.get(title=report_name)
+    file_name = request.POST.get("name")
+    list = report.documents.all()
+    for document in list:
+        if file_name == document.document.name:
+            return HttpResponse(document.document)
+    return HttpResponse("File not found")
 
 @login_required
 def add_site_manager(request):
