@@ -265,7 +265,7 @@ def fda_fetch(request):
     return HttpResponse(data)
 
 def fda_fetch_all(request):
-    report_list = Report.objects.filter(private=False)
+    report_list = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())) #private=False
     if not report_list.count():
         return HttpResponse(json.dumps("No public reports"))
 
@@ -285,6 +285,13 @@ def fda_download(request):
         if file_name == document.document.name:
             return HttpResponse(document.document)
     return HttpResponse("File not found")
+
+def fda_authenticate(request):
+    if request.user.is_authenticated():
+        return HttpResponse("is logged in")
+    else:
+        return HttpResponse("not logged in")
+    #return request.user.is_authenticated()
 
 @login_required
 def add_site_manager(request):

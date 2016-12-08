@@ -8,23 +8,35 @@ def find_filename(file_name):
     return os.path.basename(file_name)
 
 # Logging in ==============================================================
-session = requests.session()
-url = "http://localhost:8000/accounts/login/"
-print("\nPlease log in\n")
-username = input("Username: ")
-password = input("Password: ")
-session.get(url)
-token = session.cookies['csrftoken']
-payload = {'username': username, 'password': password, "csrfmiddlewaretoken": token}
-r = session.post(url, data=payload, headers=dict(Referer=url))
+while True:
+    session = requests.session()
+    url = "http://localhost:8000/accounts/login/"
+    print("\nPlease log in\n")
+    username = input("Username: ")
+    password = input("Password: ")
+    session.get(url)
+    token = session.cookies['csrftoken']
+    payload = {'username': username, 'password': password, "csrfmiddlewaretoken": token}
+    r = session.post(url, data=payload, headers=dict(Referer=url))
 
-# obtaining a master list of reports to use
+#AUTHENTICATING THE USER ================================================                                                                                            
+    url2 = "http://localhost:8000/fda_authenticate/"
+    session.get(url2)
+    token2 = session.cookies['csrftoken']
+    payload2 = {"csrfmiddlewaretoken": token2}
+    rr2 = session.post(url2, data=payload2, headers=dict(Referer=url2))
+    if rr2.text == "is logged in":
+        break
+    print("User does not exist or wrong credentials. Please try again.")
+
+# obtaining a master list of reports to use                                                                                                                          
 master_report_list = []
 url = "http://localhost:8000/fetch_all/"
 session.get(url)
 token = session.cookies['csrftoken']
 payload = {"csrfmiddlewaretoken": token}
 rr = session.post(url, data=payload, headers=dict(Referer=url))
+
 data = json.loads(rr.text)
 if data == "No public reports":
     print("There seems to be no reports")
@@ -33,12 +45,12 @@ else:
 
 master = True
 while master == True:
-    decision = input("\n1: List all public reports"
+    decision = input("\n1: List all viewable reports"
                      "\n2: List specific report""\n3: Terminate\nPlease choose number option: ")
 
     # grabbing all public reports
     if decision == "1":
-        print("\nHere are all public reports: ")
+        print("\nHere are all viewable reports: ")
         for report in master_report_list:
             print("  ", report[0], "\n     - ", report[1], "\n")
 

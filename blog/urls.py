@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^fetch/$', views.fda_fetch, name='fda_fetch'),
     url(r'^download/$', views.fda_download, name='fda_download'),
     url(r'^fetch_all/$', views.fda_fetch_all, name='fda_fetch_all'),
+    url(r'^fda_authenticate/$', views.fda_authenticate, name='fda_authenticate'), # FOR AUTHENTICATION OF USERS IN FDA
     url(r'^get_unread_messages', views.get_unread_messages),
     url(r'^site_manager/actions', views.site_manager_actions, name='site_manager_actions'),
     url(r'^site_manager/add_site_manager', views.add_site_manager, name='add_site_manager'),
