@@ -75,9 +75,12 @@ def report_draft_list(request):
     if query:
         reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__isnull=True)) 
         reports = reports.filter(
-            Q(title__icontains=query)|
-            Q(description__icontains=query)
-        )
+            Q(Q(title__icontains=query)|
+            Q(author__first_name__icontains=query)|
+            Q(author__last_name__icontains=query)|
+            Q(long_description__icontains=query)|
+            Q(short_description__icontains=query)
+            ) & Q(Q(private=False) | Q(author=request.user))) 
     else:
         reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__isnull=True)).order_by('created_date') #get list of posts that have no published date (ergo, drafts)
     return render(request, 'blog/report_draft_list.html', {'reports': reports})
