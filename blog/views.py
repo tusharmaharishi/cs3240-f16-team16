@@ -14,9 +14,6 @@ import os
 
 @login_required
 def report_list(request):
-    #posts = Post.objects.all()#filter(published_date__lte=timezone.now()).order_by('published_date')
-    #posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    #post = get_object_or_404(Post, pk=pk)
     query = request.GET.get("q")
     if query:
         reports = Report.objects.filter((
@@ -26,6 +23,8 @@ def report_list(request):
             Q(long_description__icontains=query)|
             Q(short_description__icontains=query)
         ) & Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())) # fixing privacy issues with searching
+    elif request.user.is_superuser:
+        reports = Report.objects.all
     else:
         reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
     return render(request, 'blog/report_list.html', {'reports': reports})
@@ -107,6 +106,8 @@ def group_list(request):
         groups = Group.objects.filter(
             Q(name__icontains=query)
         )
+    elif request.user.is_superuser:
+        groups = Group.objects.all()
     else:
         groups = request.user.groups.all()
     
@@ -305,27 +306,42 @@ def add_site_manager(request):
             return redirect('report_list',)
     else:
         form = SiteManagerAdd()
-    return render(request, 'admin/add_site_manager.html', {'form' : form })
+    return render(request, 'admin/add_site_manager.html', {'form' : form})
 
 @login_required
 def site_manager_actions(request):
     return render(request, 'admin/site_manager_actions.html',)
-# def search_file(request):
-#     if request.method == 'POST':
-#         form = SearchForm(request.POST)
-#         if form.is_valid():
-#             # file is saved
-#             title = form.cleaned_data['title']
-#             desc = form.cleaned_data['description']
-#             loc = form.cleaned_data['location']
-#             tag = form.cleaned_data['tag']
-#             r_list = Report.objects.filter(title__icontains=title).filter(
-#                 Q(short_desc__icontains=desc) | Q(detailed_desc__icontains=desc)).filter(
-#                 location__icontains=loc).filter(tag__icontains=tag)  # case-insensitive contain
-#             context = {'report_list': r_list, 'valid': True}
-#         else:
-#             context = {'report_list': [], 'valid': False}
-#     else:
-#         form = SearchForm()
-#         return render(request, 'report_search.html', {'form': form})
-#     return render(request, 'report_view.html', context)
+
+@login_required
+def suspend_user(request):
+    if request.method == "POST":
+        form = SiteManagerAdd(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['user']
+            user = User.objects.get(username=name)
+            user.is_active = False
+            user.save()
+            return redirect('report_list',)
+    else:
+        form = SiteManagerAdd()
+    return render(request, 'admin/suspend_user.html', {'form' : form })
+
+@login_required
+def restore_user(request):
+    if request.method == "POST":
+        form = SiteManagerAdd(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['user']
+            user = User.objects.get(username=name)
+            user.is_active = True
+            user.save()
+            return redirect('report_list',)
+    else:
+        form = SiteManagerAdd()
+    return render(request, 'admin/restore_user.html', {'form' : form })
+
+@login_required
+def delete_report(request, pk):
+    report = get_object_or_404(Report, pk=pk)
+    report.delete()
+    return redirect('report_list',)

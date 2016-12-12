@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h1>Restore User:</h1>
+    <form action="{{ action }}" method="POST" class="admin-form">{% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="save btn btn-default">Restore User</button>
+    </form>
+{% endblock %}

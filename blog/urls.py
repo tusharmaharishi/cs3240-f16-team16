@@ -30,10 +30,8 @@ urlpatterns = [
     url(r'^get_unread_messages', views.get_unread_messages),
     url(r'^site_manager/actions', views.site_manager_actions, name='site_manager_actions'),
     url(r'^site_manager/add_site_manager', views.add_site_manager, name='add_site_manager'),
-
-    #url(r'^group/(?P<pk>\d+)/add/$', views.add_user, name='add_user'),
-
-    #comment out if not working:
-    #url(r'^search/$', search_file),
+    url(r'^site_manager/suspend_user', views.suspend_user, name='suspend_user'),
+    url(r'^site_manager/restore_user', views.restore_user, name='restore_user'),
+    url(r'^site_manager/delete_report/(?P<pk>\d+)/$', views.delete_report, name='delete_report'),
 ]
 
