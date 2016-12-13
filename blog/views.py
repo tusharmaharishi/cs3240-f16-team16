@@ -268,7 +268,10 @@ def fda_fetch(request):
     return HttpResponse(data)
 
 def fda_fetch_all(request):
-    report_list = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())) #private=False
+    if request.user.is_superuser:
+        report_list = Report.objects.filter(published_date__lte=timezone.now()) #get all non-drafts
+    else:
+        report_list = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())) #private=False
     if not report_list.count():
         return HttpResponse(json.dumps("No public reports"))
 
