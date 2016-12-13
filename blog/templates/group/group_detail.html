@@ -5,7 +5,9 @@
 <div class "group">
     <h1>{{ group.name }}</h1>
     <p><a href="{% url 'group_adduser' pk=group.pk %}">Add user to group?</a></p>
-	<p><a href="{% url 'group_removeuser' pk=group.pk %}">Remove user from group?</a></p>
+    {% if request.user.is_superuser %}
+    <p><a href="{% url 'group_removeuser' pk=group.pk %}">Remove user from group?</a></p>
+    {% endif %}
 <h2>USERS</h2>
 {% for item in userlist %}
 <p>{{ item.get_username }}</p>

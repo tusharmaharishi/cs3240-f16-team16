@@ -24,7 +24,7 @@ def report_list(request):
             Q(short_description__icontains=query)
         ) & Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())) # fixing privacy issues with searching
     elif request.user.is_superuser:
-        reports = Report.objects.all
+        reports = Report.objects.filter(published_date__lte=timezone.now()) #get all non-drafts #Report.objects.all
     else:
         reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
     return render(request, 'blog/report_list.html', {'reports': reports})
@@ -82,6 +82,8 @@ def report_draft_list(request):
             Q(long_description__icontains=query)|
             Q(short_description__icontains=query)
             ) & Q(Q(private=False) | Q(author=request.user))) 
+    elif request.user.is_superuser:
+        reports = Report.objects.filter(published_date__isnull=True) #get all drafts #Report.objects.all      
     else:
         reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__isnull=True)).order_by('created_date') #get list of posts that have no published date (ergo, drafts)
     return render(request, 'blog/report_draft_list.html', {'reports': reports})
@@ -300,9 +302,10 @@ def add_site_manager(request):
         form = SiteManagerAdd(request.POST)
         if form.is_valid():
             name = form.cleaned_data['user']
-            user = User.objects.get(username=name)
-            user.is_superuser = True
-            user.save()
+            if User.objects.filter(username=name).count() == 1:
+                user = User.objects.get(username=name)
+                user.is_superuser = True
+                user.save()
             return redirect('report_list',)
     else:
         form = SiteManagerAdd()
@@ -318,9 +321,10 @@ def suspend_user(request):
         form = SiteManagerAdd(request.POST)
         if form.is_valid():
             name = form.cleaned_data['user']
-            user = User.objects.get(username=name)
-            user.is_active = False
-            user.save()
+            if User.objects.filter(username=name).count() == 1:
+                user = User.objects.get(username=name)
+                user.is_active = False
+                user.save()
             return redirect('report_list',)
     else:
         form = SiteManagerAdd()
@@ -332,9 +336,10 @@ def restore_user(request):
         form = SiteManagerAdd(request.POST)
         if form.is_valid():
             name = form.cleaned_data['user']
-            user = User.objects.get(username=name)
-            user.is_active = True
-            user.save()
+            if User.objects.filter(username=name).count() == 1:
+                user = User.objects.get(username=name)
+                user.is_active = True
+                user.save()
             return redirect('report_list',)
     else:
         form = SiteManagerAdd()
