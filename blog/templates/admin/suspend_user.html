@@ -6,4 +6,8 @@
       {{ form.as_p }}
       <button type="submit" class="save btn btn-default">Suspend User</button>
     </form>
+    <h2> LIST OF USERS </h2>
+    {% for user in userlist %}
+    <h3>{{ user.username }}</h3>
+    {% endfor %}
 {% endblock %}

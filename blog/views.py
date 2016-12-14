@@ -178,7 +178,8 @@ def group_detail(request, pk):
             Q(description__icontains=query)
         )
     else:
-        reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
+        reports = Report.objects.filter(Q(group = group.name) & Q(published_date__lte=timezone.now())).order_by('published_date')
+#reports = Report.objects.filter(Q(Q(private=False) | Q(author=request.user)) & Q(published_date__lte=timezone.now())).order_by('published_date')
     return render(request, 'group/group_detail.html', {'group' : group, 'userlist' : userlist, 'reportlist' : reports})
 
 @login_required
@@ -301,6 +302,7 @@ def fda_authenticate(request):
 
 @login_required
 def add_site_manager(request):
+    userlist = User.objects.all()
     if request.method == "POST":
         form = SiteManagerAdd(request.POST)
         if form.is_valid():
@@ -312,7 +314,7 @@ def add_site_manager(request):
             return redirect('report_list',)
     else:
         form = SiteManagerAdd()
-    return render(request, 'admin/add_site_manager.html', {'form' : form})
+    return render(request, 'admin/add_site_manager.html', {'form' : form, 'userlist' : userlist })
 
 @login_required
 def site_manager_actions(request):
@@ -320,6 +322,7 @@ def site_manager_actions(request):
 
 @login_required
 def suspend_user(request):
+    userlist = User.objects.all()
     if request.method == "POST":
         form = SiteManagerAdd(request.POST)
         if form.is_valid():
@@ -331,10 +334,11 @@ def suspend_user(request):
             return redirect('report_list',)
     else:
         form = SiteManagerAdd()
-    return render(request, 'admin/suspend_user.html', {'form' : form })
+    return render(request, 'admin/suspend_user.html', {'form' : form, 'userlist' : userlist })
 
 @login_required
 def restore_user(request):
+    userlist = User.objects.all()
     if request.method == "POST":
         form = SiteManagerAdd(request.POST)
         if form.is_valid():
@@ -346,7 +350,7 @@ def restore_user(request):
             return redirect('report_list',)
     else:
         form = SiteManagerAdd()
-    return render(request, 'admin/restore_user.html', {'form' : form })
+    return render(request, 'admin/restore_user.html', {'form' : form, 'userlist' : userlist })
 
 @login_required
 def delete_report(request, pk):
